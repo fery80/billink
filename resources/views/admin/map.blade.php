@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-{{-- Geocoder (Search lokasi umum) --}}
+{{-- Geocoder --}}
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
@@ -117,11 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fungsi membuat marker berwarna
     function createColoredMarker(lat, lng, color, pulse = false) {
         if (pulse) {
-            // Marker animasi untuk "belumbayar"
-            return L.divIcon({
-                className: 'pulse',
-                iconSize: [16, 16],
-            });
+            return L.divIcon({ className: 'pulse', iconSize: [16, 16] });
         }
         return L.circleMarker([lat, lng], {
             radius: 9,
@@ -177,9 +173,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
 
+            // 🔹 Sekarang popup dibuka saat marker diklik
             marker.bindPopup(popupContent);
-            marker.on('mouseover', () => marker.openPopup());
-            marker.on('mouseout', () => marker.closePopup());
+
+            marker.on('click', function () {
+                marker.openPopup();
+                if (marker.setStyle) marker.setStyle({ radius: 12 });
+            });
+
+            marker.on('popupclose', function () {
+                if (marker.setStyle) marker.setStyle({ radius: 9 });
+            });
 
             pelangganLayer.addLayer(marker);
             markerList.push({ marker, data: p });
