@@ -20,4 +20,5 @@ class Paket extends Model
     ];
 
     public $timestamps = true;
+    
 }
